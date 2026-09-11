@@ -3,13 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>박지민 · 사원관리</title>
+  <title>[[${emp.empName}]] · 사원관리</title>
   <link rel="stylesheet" href="css/basic.css">
   <link rel="stylesheet" href="css/component.css">
   <link rel="stylesheet" href="css/app-shell.css">
   <link rel="stylesheet" href="css/hr.css">
   <script src="js/component.js" defer></script>
 </head>
+
+[[${emp}]]
+
+
 <body>
   <!-- 공통 메뉴 — templates/hr/_menu.html 참고 (Thymeleaf 전환 시 fragment 로) -->
   <header class="site-header">
@@ -29,7 +33,7 @@
   <main class="app-main container">
     <nav class="breadcrumb mb-4" aria-label="현재 위치">
       <a href="index.html">사원 목록</a>
-      <span aria-current="page">박지민</span>
+      <span aria-current="page" th:text="${emp.empName}">박지민</span>
     </nav>
 
     <!-- 프로필 -->
@@ -37,8 +41,8 @@
       <div class="profile">
         <span class="avatar">박</span>
         <div class="spacer">
-          <p class="profile__name">박지민 <span class="badge badge--success badge--dot">재직</span></p>
-          <p class="profile__sub">해외영업1부 · 부장 · 사번 205</p>
+          <p class="profile__name" th:text="${emp.empName}">박지민 <span class="badge badge--success badge--dot">재직</span></p>
+          <p class="profile__sub">해외영업1부 · 부장 · 사번 [[${emp.empId}]]</p>
         </div>
         <div class="row" style="--gap: var(--space-2)">
           <a class="btn btn--secondary" href="emp-form.html">수정</a>
@@ -57,12 +61,16 @@
 
       <div class="tabs__panel" role="tabpanel" id="p-basic" aria-labelledby="t-basic">
         <table class="info-table">
-          <tr><th>사번</th><td>205</td></tr>
-          <tr><th>이름</th><td>박지민</td></tr>
-          <tr><th>이메일</th><td>park_jm@company.com</td></tr>
-          <tr><th>전화</th><td>010-3665-4875</td></tr>
-          <tr><th>입사일</th><td>2015-05-20 (근속 11년)</td></tr>
-          <tr><th>재직 여부</th><td><span class="badge badge--success">재직</span></td></tr>
+          <tr><th>사번</th><td th:text="${emp.empId}">205</td></tr>
+          <tr><th>이름</th><td th:text="${emp.empName}">박지민</td></tr>
+          <tr><th>이메일</th><td th:text="${emp.email}">park_jm@company.com</td></tr>
+          <tr><th>전화</th><td th:text="${emp.phone}">010-3665-4875</td></tr>
+          <tr><th>입사일</th><td>[[${emp.hireDate}]] (근속 11년)</td></tr>
+          <tr><th>재직 여부</th><td>
+				<span class="badge badge--success" th:if="${emp.active}">재직</span>
+				<span class="badge badge--danger" th:if="${not emp.active}">퇴사</span>
+			
+			</td></tr>
         </table>
       </div>
 

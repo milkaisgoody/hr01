@@ -43,4 +43,9 @@ public class EmpServiceImpl implements EmpService {
 		model.addAttribute("totalCnt", totalCnt);
 	}
 
+	@Override
+	public EmpDto selectById(String empId) {
+		return mapper.selectById(empId);
+	}
+
 }

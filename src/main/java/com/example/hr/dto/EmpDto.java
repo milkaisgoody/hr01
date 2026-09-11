@@ -16,6 +16,9 @@ public class EmpDto {
 	// entYn=Y 이면 active = false
 	// entYn=N 이면 active = true
 	private boolean active;
+	private String phone;
+	private int salary;
+	private float bonus;
 
 	
 	public void setEntYn(String entYn) {

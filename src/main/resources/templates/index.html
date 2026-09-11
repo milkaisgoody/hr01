@@ -12,7 +12,23 @@
 </head>
 <body>
 [[${list}]]
-[[${totalCnt}]]
+	<table>
+		<thead>
+		<tr>
+			<th>사원명</th>
+		</tr>
+		</thead>
+		
+		<tbody>
+		<tr th:each="emp : ${list}">
+			<td th:text="${emp.empName}">오미자</td>
+			<td th:text="${emp.email}">aaa@bbb.com</td>
+		</tr>
+		</tbody>
+	</table>
+
+
+
 	
   <!-- 공통 메뉴 — templates/hr/_menu.html 참고 (Thymeleaf 전환 시 fragment 로) -->
   <header class="site-header">
@@ -104,61 +120,18 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>200</td>
-            <td><a href="emp-detail.html">곽상혁</a></td>
-            <td>총무부</td><td>대표</td><td>2013-03-02</td>
-            <td><span class="badge badge--success badge--dot">재직</span></td>
-            <td class="row-actions"><a href="emp-detail.html">상세</a><a href="emp-form.html">수정</a></td>
-          </tr>
-          <tr>
-            <td>201</td>
-            <td><a href="emp-detail.html">권진우</a></td>
-            <td>총무부</td><td>부사장</td><td>2013-09-15</td>
-            <td><span class="badge badge--success badge--dot">재직</span></td>
-            <td class="row-actions"><a href="emp-detail.html">상세</a><a href="emp-form.html">수정</a></td>
-          </tr>
-          <tr>
-            <td>205</td>
-            <td><a href="emp-detail.html">박지민</a></td>
-            <td>해외영업1부</td><td>부장</td><td>2015-05-20</td>
-            <td><span class="badge badge--success badge--dot">재직</span></td>
-            <td class="row-actions"><a href="emp-detail.html">상세</a><a href="emp-form.html">수정</a></td>
-          </tr>
-          <tr>
-            <td>206</td>
-            <td><a href="emp-detail.html">염성원</a></td>
-            <td>해외영업1부</td><td>과장</td><td>2017-06-07</td>
-            <td><span class="badge badge--success badge--dot">재직</span></td>
-            <td class="row-actions"><a href="emp-detail.html">상세</a><a href="emp-form.html">수정</a></td>
-          </tr>
-          <tr>
-            <td>210</td>
-            <td><a href="emp-detail.html">이광렬</a></td>
-            <td>기술지원부</td><td>대리</td><td>2020-03-12</td>
-            <td><span class="badge badge--success badge--dot">재직</span></td>
-            <td class="row-actions"><a href="emp-detail.html">상세</a><a href="emp-form.html">수정</a></td>
-          </tr>
-          <tr>
-            <td>212</td>
-            <td><a href="emp-detail.html">오미자</a></td>
-            <td>기술지원부</td><td>사원</td><td>2021-11-28</td>
-            <td><span class="badge badge--danger badge--dot">퇴사</span></td>
-            <td class="row-actions"><a href="emp-detail.html">상세</a><a href="emp-form.html">수정</a></td>
-          </tr>
-          <tr>
-            <td>213</td>
-            <td><a href="emp-detail.html">이다현</a></td>
-            <td>인사관리부</td><td>대리</td><td>2021-02-03</td>
-            <td><span class="badge badge--success badge--dot">재직</span></td>
-            <td class="row-actions"><a href="emp-detail.html">상세</a><a href="emp-form.html">수정</a></td>
-          </tr>
-          <tr>
-            <td>216</td>
-            <td><a href="emp-detail.html">박홍주</a></td>
-            <td>회계관리부</td><td>차장</td><td>2015-11-09</td>
-            <td><span class="badge badge--success badge--dot">재직</span></td>
-            <td class="row-actions"><a href="emp-detail.html">상세</a><a href="emp-form.html">수정</a></td>
+          <tr th:each="emp : ${list}">
+            <td th:text="${emp.empId}">200</td>
+			<!-- th:href = "@{경로(파라메터이름=${값})}"-->
+            <td><a th:href="@{emp-detail(empId=${emp.empId})}" th:text="${emp.empName}">곽상혁</a></td>
+            <td>총무부</td><td>대표</td><td th:text="${emp.hireDate}">2013-03-02</td>
+            <td>
+				<span class="badge badge--success badge--dot" 
+					th:if="${emp.active}">재직</span>
+				<span class="badge badge--danger badge--dot"
+					th:if="${not emp.active}">퇴직</span>				
+			</td>
+            <td class="row-actions"><a href="emp-detail">상세</a><a href="emp-form.html">수정</a></td>
           </tr>
         </tbody>
       </table>

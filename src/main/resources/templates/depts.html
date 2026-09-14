@@ -11,6 +11,7 @@
   <script src="js/component.js" defer></script>
 </head>
 <body>
+	
   <!-- 공통 메뉴 — templates/hr/_menu.html 참고 (Thymeleaf 전환 시 fragment 로) -->
   <header class="site-header">
     <div class="site-header__inner container container--wide">
@@ -30,7 +31,7 @@
     <div class="page-head">
       <div>
         <h1>부서</h1>
-        <p>전체 9개 부서</p>
+        <p>전체 [[${totalCnt}]]개 부서</p>
       </div>
       <button class="btn btn--primary" type="button" data-modal-open="dept-modal">+ 부서 추가</button>
     </div>

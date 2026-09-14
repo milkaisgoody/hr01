@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- Day 7 : src/main/resources/mapper/EmpMapper.xml
+     namespace = 매퍼 인터페이스 FQCN, <select id> = 메서드명 -->
+<mapper namespace="com.example.hr.mapper.DeptMapper">
+	<select id="selectAll" resultType="DeptDto">
+		SELECT 	DEPT_ID, DEPT_TITLE, NATIONAL_NAME, COUNT(EMP_ID) CNT, AVG(SALARY) AVG
+		FROM 	DEPT D 
+		LEFT 	JOIN LOCATION L ON D.LOCATION_ID = L.LOCAL_CODE
+		LEFT 	JOIN NATIONAL N USING (NATIONAL_CODE)
+		LEFT 	JOIN EMP E USING (DEPT_ID)
+		GROUP BY DEPT_ID, DEPT_TITLE, NATIONAL_NAME
+	</select>
+
+</mapper>

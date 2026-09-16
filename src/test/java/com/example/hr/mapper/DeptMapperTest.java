@@ -27,7 +27,37 @@ public class DeptMapperTest {
 	@Test
 	public void selectAll() {
 		List<DeptDto> list = mapper.selectAll();
+		System.out.println(list);
+		
 		assertEquals(9, list.size());
 		
 	}
+	
+	@Test
+	public void saveDept() {
+		DeptDto dto = new DeptDto();
+		dto.setDeptId("A3");
+		dto.setDeptTitle("신규사업부");
+		dto.setLocationId("L2");
+		
+		int res = mapper.saveDept(dto);
+		assertEquals(1, res);
+		
+		if(res > 0) {
+			System.out.println("등록 되었습니다.");
+		} else {
+			System.out.println("등록 실패");
+		}
+		
+		
+	}
 }
+
+
+
+
+
+
+
+
+

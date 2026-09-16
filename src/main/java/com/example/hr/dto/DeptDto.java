@@ -5,10 +5,14 @@ import lombok.Data;
 @Data
 public class DeptDto {
 	
+	// dept 테이블
 	private String deptId;
 	private String deptTitle;
-	private String national_name;
+	private String locationId;
+	
+	// 조인결과 수집되는 정보
+	private String nationalName;
 	private int cnt;
-	private double AVG;
+	private double avg;
 		
 }

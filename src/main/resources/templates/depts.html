@@ -11,6 +11,25 @@
   <script src="js/component.js" defer></script>
 </head>
 <body>
+<script th:inline="javascript">
+	// 타임리프 데이터가 없는 경우 null이 입력됨
+	const error = [[${error}]];
+	const msg = [[${msg}]];
+	// 에러가 발생한 경우 뒤로가기, 아니면 메세지 출력하기
+	// falsy한 값(0,'',null) -> false처럼 동작
+	// msg에 값이 들어 있으면 메세지를 출력
+	if (msg){
+		alert(msg);
+	}
+	
+	// 에러 메세지 출력후 뒤로가기
+	if (error){
+		alert(error);
+		history.back();
+	}
+	
+	
+</script>
 	
   <!-- 공통 메뉴 — templates/hr/_menu.html 참고 (Thymeleaf 전환 시 fragment 로) -->
   <header class="site-header">
@@ -42,15 +61,17 @@
           <tr><th>코드</th><th>부서명</th><th>근무지</th><th>인원</th><th>평균 급여</th><th>관리</th></tr>
         </thead>
         <tbody>
-          <tr><td>D1</td><td>인사관리부</td><td>서울</td><td>3명</td><td>2,606,000원</td><td class="row-actions"><a href="#">수정</a></td></tr>
-          <tr><td>D2</td><td>회계관리부</td><td>서울</td><td>3명</td><td>2,280,000원</td><td class="row-actions"><a href="#">수정</a></td></tr>
-          <tr><td>D3</td><td>마케팅부</td><td>서울</td><td>0명</td><td>-</td><td class="row-actions"><a href="#">수정</a></td></tr>
-          <tr><td>D4</td><td>국내영업부</td><td>서울</td><td>0명</td><td>-</td><td class="row-actions"><a href="#">수정</a></td></tr>
-          <tr><td>D5</td><td>해외영업1부</td><td>일본</td><td>5명</td><td>2,752,000원</td><td class="row-actions"><a href="#">수정</a></td></tr>
-          <tr><td>D6</td><td>해외영업2부</td><td>중국</td><td>2명</td><td>3,650,000원</td><td class="row-actions"><a href="#">수정</a></td></tr>
-          <tr><td>D7</td><td>해외영업3부</td><td>미국</td><td>0명</td><td>-</td><td class="row-actions"><a href="#">수정</a></td></tr>
-          <tr><td>D8</td><td>기술지원부</td><td>러시아</td><td>3명</td><td>2,328,000원</td><td class="row-actions"><a href="#">수정</a></td></tr>
-          <tr><td>D9</td><td>총무부</td><td>서울</td><td>3명</td><td>5,900,000원</td><td class="row-actions"><a href="#">수정</a></td></tr>
+          
+			<tr th:each="dept : ${list}">
+				<td th:text="${dept.deptId}">D1</td>
+				<td th:text="${dept.deptTitle}">인사관리부</td>
+				<!-- -->
+				<!--td th:text="${dept.nationalName">서울</td-->
+				<td th:text=" ${dept.cnt == 0 ? '-' : dept.cnt+'명'}">3명</td>
+				<td th:text=" ${dept.avg == 0 ? '-' : #numbers.formatInteger(dept.avg, 3, 'COMMA') + '원'}">2,606,000원</td>
+				<td class="row-actions"><a href="#">수정</a></td>
+			</tr>
+          
         </tbody>
       </table>
     </div>
@@ -69,24 +90,33 @@
     <div class="modal__panel" role="dialog" aria-modal="true" tabindex="-1" aria-labelledby="dept-modal-title" style="width: min(440px, 100%)">
       <button class="modal__close" type="button" data-modal-close aria-label="닫기">×</button>
       <h3 class="modal__title" id="dept-modal-title">부서 추가</h3>
-      <form class="modal__body stack" style="--gap: var(--space-4)" data-dept-form>
+      <form name="saveForm" action="/saveDept" method="post" class="modal__body stack" style="--gap: var(--space-4)" data-dept-form>
         <div class="field">
           <label class="label" for="d-code">부서 코드 *</label>
-          <input class="input" id="d-code" placeholder="D10" required>
+          <input class="input" id="d-code" placeholder="D10" name="deptId" required>
         </div>
         <div class="field">
           <label class="label" for="d-name">부서명 *</label>
-          <input class="input" id="d-name" placeholder="신사업개발부" required>
+          <input class="input" id="d-name" placeholder="신사업개발부" required name="deptTitle">
         </div>
         <div class="field">
           <label class="label" for="d-loc">근무지</label>
-          <select class="select" id="d-loc">
-            <option>서울</option><option>일본</option><option>중국</option><option>미국</option><option>러시아</option>
+          <select class="select" id="d-loc" name="locationId">
+            <option value="L1">서울</option>
+			<option value="L2">일본</option>
+			<option value="L3">중국</option>
+			<option value="L4">미국</option>
+			<option value="L5">러시아</option>
           </select>
         </div>
       </form>
       <div class="modal__footer">
         <button class="btn btn--secondary" type="button" data-modal-close>취소</button>
+		<!-- 서브밋 버튼 만들기
+			1. type을 submit
+			2. 자바스크립트를 활용
+		-->
+		
         <button class="btn btn--primary" type="button" id="dept-save">추가</button>
       </div>
     </div>
@@ -95,8 +125,11 @@
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       document.getElementById("dept-save").addEventListener("click", function () {
-        UI.modal.close("dept-modal");
-        UI.toast("부서가 추가되었습니다. (프로토타입)", { type: "success" });
+        //UI.modal.close("dept-modal");
+        //UI.toast("부서가 추가되었습니다. (프로토타입)", { type: "success" });
+		// 폼에 있는 name속성이 있는 요소를 가지고 서버로 전송
+		// name속성=value속성
+		saveForm.submit();
       });
     });
   </script>

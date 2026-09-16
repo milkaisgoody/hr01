@@ -27,4 +27,9 @@ public class DeptServiceImpl implements DeptService {
 		return mapper.selectAll();
 	}
 
+	@Override
+	public int saveDept(DeptDto dept) {
+		return mapper.saveDept(dept);
+	}
+
 }

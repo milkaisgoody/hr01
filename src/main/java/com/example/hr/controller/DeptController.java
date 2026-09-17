@@ -4,12 +4,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.hr.dto.DeptDto;
 import com.example.hr.service.DeptService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,7 +24,8 @@ public class DeptController {
 	private final DeptService service;
 	
 	@GetMapping("/depts")
-	public void depts(Model model) {
+	public void depts(Model model, HttpSession session) {
+		session.setAttribute("loginId", "abc");
 		model.addAttribute("totalCnt", service.totalCnt());
 		model.addAttribute("list", service.selectAll());
 	}
@@ -33,6 +36,7 @@ public class DeptController {
 	@PostMapping("/saveDept")
 	public String depts(@ModelAttribute DeptDto dept, RedirectAttributes ra) {
 		// RedirectAttributes : redirect시 데이터를 유지하기 위해서 
+		
 		
 		
 		log.info("dept : " + dept);
@@ -67,6 +71,17 @@ public class DeptController {
 		// 부서 목록 페이지로 리다이렉트(웹브라우저에게 다시 요청하라고 전달)
 		//model.addAttribute("list", service.selectAll());
 		
+		return "redirect:/depts";
+	}
+	
+	// queryString -> PathVariable
+	// queryString : /deletedept?deptId=A1 
+	// PathVariable : /deletedept/A1
+	// 경로로 부터 데이터를 수집
+	@GetMapping("/deleteDept/{deptId}")
+	public String deleteDept(@PathVariable(name = "deptId") String deptId) {
+		log.info(deptId);
+		System.out.println(deptId);
 		return "redirect:/depts";
 	}
 }

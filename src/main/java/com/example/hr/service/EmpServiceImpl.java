@@ -48,4 +48,58 @@ public class EmpServiceImpl implements EmpService {
 		return mapper.selectById(empId);
 	}
 
+	@Override
+	public EmpDto login(String id, String pw) throws Exception {
+		
+		// 1. 사용자 조회
+		EmpDto emp = mapper.selectByUserId(id);
+		
+		// 2. 아이디가 없는경우 -> 메세지 처리(예외를 발생 시킴 -> 예외 메세지를 전달)
+		if(emp == null)
+			throw new Exception("존재하지 않는 아이디 입니다.");
+		
+		// 3. 잠긴 계정인지 확인 -> 잠겼으면 메세지 처리
+		if(emp.getIs_locked() == 1)
+			throw new Exception("비밀번호 5회 실패로 잠긴 계정입니다. 관리자에게 문의 해주세요.");
+		
+		// 4. 비밀번호 일치 확인 -> 일치하지 않으면 실패 카운트후 메세지 처리
+		if(!emp.getPw().equals(pw)) {
+			// 실패 카운트
+			mapper.updateFailCount(id); 
+			// TODO 5회 초과시 -> 계정잠금
+			if(emp.getLogin_fail_count()+1 > 5) {
+				mapper.lockUserAccount(id);
+				throw new Exception("5회 실패로 계정이 잠겼습니다.");
+			}
+			
+			throw new Exception("비밀번호가 일치하지 않습니다.");
+			
+		}
+		
+		// 5. 로그인 성공 -> empDto반환
+		// 실패카운트 초기화
+		mapper.resetFailCount(id);
+		return emp;
+	}
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

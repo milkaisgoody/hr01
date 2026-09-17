@@ -19,6 +19,12 @@ public class EmpDto {
 	private String phone;
 	private int salary;
 	private float bonus;
+	
+	private String id;
+	private String pw;
+	// 계정 잠금 여부 (0:정상, 1:잠금)
+	private int is_locked;
+	private int login_fail_count;
 
 	
 	public void setEntYn(String entYn) {

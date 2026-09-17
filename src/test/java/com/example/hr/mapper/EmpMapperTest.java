@@ -52,4 +52,12 @@ public class EmpMapperTest {
 		
 		assertNull(emp);
 	}
+	
+	@Test
+	public void selectByUserId() {
+		EmpDto emp = mapper.selectById("200");
+		System.out.println(emp);
+		
+		assertNull(emp);
+	}
 }

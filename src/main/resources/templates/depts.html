@@ -46,7 +46,8 @@
       </nav>
       <span class="spacer"></span>
       <button class="btn btn--ghost btn--sm" type="button" data-theme-toggle aria-label="다크 모드 전환">🌓</button>
-      <a class="btn btn--primary btn--sm" href="login.html">로그인</a>
+      <a class="btn btn--primary btn--sm" href="/login">로그인</a>
+	  [[${session.loginId}]]
     </div>
   </header>
 
@@ -75,7 +76,7 @@
 				<td th:text="${dept.nationalName}">서울</td>
 				<td th:text=" ${dept.cnt == 0 ? '-' : dept.cnt+'명'}">3명</td>
 				<td th:text=" ${dept.avg == 0 ? '-' : #numbers.formatInteger(dept.avg, 3, 'COMMA') + '원'}">2,606,000원</td>
-				<td class="row-actions"><a href="#" >수정</a></td>
+				<td class="row-actions"><a href="/deleteDept/A1">삭제</a></td>
 			</tr>
           
         </tbody>

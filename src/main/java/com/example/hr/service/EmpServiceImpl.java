@@ -1,6 +1,5 @@
 package com.example.hr.service;
 
-import com.example.hr.controller.LoginController;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -9,27 +8,24 @@ import org.springframework.ui.Model;
 import com.example.hr.dto.EmpDto;
 import com.example.hr.mapper.EmpMapper;
 
+import lombok.RequiredArgsConstructor;
+
 /*
  * 인터페이스의 구현체 
  */
 @Service
+@RequiredArgsConstructor
 public class EmpServiceImpl implements EmpService {
 
 	// @Autowired : 필드 주입
 	// 리플렉션으로 필드에 직접 주입
 	
-	private final LoginController loginController;
+	
 	// DI
 	// 1. 필드 주입
 	// 2. Setter 주입
 	// 3. 생성자 주입
-	// @Autowired
 	private final EmpMapper mapper;
-
-	public EmpServiceImpl(EmpMapper mapper, LoginController loginController) {
-		this.mapper = mapper;
-		this.loginController = loginController;
-	}
 	
 	@Override
 	public int totalCnt() {
@@ -66,25 +62,25 @@ public class EmpServiceImpl implements EmpService {
 			throw new Exception("비밀번호 5회 실패로 잠긴 계정입니다. 관리자에게 문의 해주세요.");
 		
 		// 4. 비밀번호 일치 확인 -> 일치하지 않으면 실패 카운트후 메세지 처리
+		// -> 예외가 발생되면 (( 롤백 ))이 되어버림 
+		// -> 컨트롤러에서 로그인 실패시 메서드를 다시 호출 
 		if(!emp.getPw().equals(pw)) {
-			// 실패 카운트
-			mapper.updateFailCount(id); 
-			// TODO 5회 초과시 -> 계정잠금
-			if(emp.getLoginFailCount()+1 > 5) {
-				mapper.lockUserAccount(id);
-				throw new Exception("5회 실패로 계정이 잠겼습니다.");
-			}
-			
 			throw new Exception("비밀번호가 일치하지 않습니다.");
-			
 		}
 		
 		// 5. 로그인 성공 -> empDto반환
 		// 실패카운트 초기화
+		// TODO : commit 안됨!!!
 		mapper.resetFailCount(id);
 		return emp;
 	}
 
+
+	@Override
+	public int updateFailCount(String id) {
+		
+		return mapper.updateFailCount(id);
+	}
 }
 
 

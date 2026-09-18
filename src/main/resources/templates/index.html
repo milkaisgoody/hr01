@@ -23,8 +23,13 @@
       </nav>
       <span class="spacer"></span>
       <button class="btn btn--ghost btn--sm" type="button" data-theme-toggle aria-label="다크 모드 전환">🌓</button>
-      <a class="btn btn--primary btn--sm" href="/login">로그인</a>
-      [[${session.loginId}]]
+      
+      <!-- 로그인된 사용자의 경우 메세지 출력 -->
+      <span th:if=${session.user!=null}>
+      	[[${session.user.empName}]]님 환영합니다.	
+      </span>
+      <a class="btn btn--primary btn--sm" href="/login" th:if="${session.user == null}">로그인</a>
+      <a class="btn btn--primary btn--sm" href="/logout" th:if="${session.user != null}">로그아웃</a>
     </div>
   </header>
 

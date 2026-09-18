@@ -28,13 +28,12 @@ public interface EmpMapper {
 	public EmpDto selectByUserId(String id);
 	
 	
-	@Update("update emp set login_fail_count=login_fail_count+1 where id=#{id}")
 	public int updateFailCount(String id);
 	
 	@Update("update emp set is_locked=1 where id=#{id}")
 	public int lockUserAccount(String id);
 	
-	@Update("update emp set login_fail_count=0 where id=#{id}")
+	@Update("update emp set login_fail_count=0, last_login_at=now() where id=#{id}")
 	public int resetFailCount(String id);
 	
 	

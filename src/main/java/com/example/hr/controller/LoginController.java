@@ -1,12 +1,24 @@
 package com.example.hr.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.hr.dto.EmpDto;
+import com.example.hr.service.EmpService;
+
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
+
 @Controller
+@RequiredArgsConstructor
 public class LoginController {
+	
+	// @RequiredArgsConstructor를 이용한 생성자 주입
+	private final EmpService service;
+	
 	@GetMapping("/login")
 	public void login() {
 		
@@ -17,7 +29,11 @@ public class LoginController {
 	// 로그인 -> 회원목록페이지로 이동
 	@PostMapping("/login")
 	public String loginAction(@RequestParam(name = "id") String id,
-								@RequestParam(name = "pw") String pw) {
+								@RequestParam(name = "pw") String pw,
+								HttpSession session,
+								Model model) {
+		
+		
 		System.out.println("id : " + id);
 		System.out.println("pw : " + pw);
 		
@@ -31,8 +47,42 @@ public class LoginController {
 		 			-> 메세지 처리
 		 			-> 뒤로가기
 		*/ 
+		try {
+			EmpDto emp = service.login(id, pw);
+			// 인증된 사용자의 정보를 세션영역에 저장
+			session.setAttribute("user", emp);
+			
+			// 사원 목록 페이지로 이동하기
+			return "redirect:emps";
+		} catch (Exception e) {
+			// failCnt 업데이트
+			//e.printStackTrace();
+			// 로그인 실패 카운팅, 5회 실패시 계정 잠금
+			service.updateFailCount(id);
+			// 오류 메세지 내용을 화면에 전달 
+			model.addAttribute("error", e.getMessage());
+			return "login";
+		}
 		
-		
-		return "redirect:emps";
 	}
+	
+	
+	
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+
+		// 세션초기화
+		session.invalidate();
+		
+		return "/login";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

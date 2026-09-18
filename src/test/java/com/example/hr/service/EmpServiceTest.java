@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.example.hr.dto.EmpDto;
+
 @SpringBootTest
 public class EmpServiceTest {
 	
@@ -22,5 +24,68 @@ public class EmpServiceTest {
 	@Test
 	public void selectByCond() {
 		service.selectByCond(null);
+	}
+	
+	@Test
+	public void login_없는ID() {
+		try {
+			service.login("id123", "pw123");
+		} catch (Exception e) {
+			// TODO 사용자정의예외처리로 변경하기
+			String msg = e.getMessage();
+			System.out.println(msg);
+		}
+	}
+
+	@Test
+	public void login_계정잠김() {
+		// 잠긴계정을 이용해서 테스트
+		try {
+			service.login("lock", "pw123");
+		} catch (Exception e) {
+			// TODO 사용자정의예외처리로 변경하기
+			String msg = e.getMessage();
+			System.out.println(msg);
+		}
+	}
+	
+
+	@Test
+	public void login_비밀번호_불일치() {
+		// 잠긴계정을 이용해서 테스트
+		try {
+			service.login("201", "pw123");
+		} catch (Exception e) {
+			// TODO 사용자정의예외처리로 변경하기
+			String msg = e.getMessage();
+			System.out.println(msg);
+		}
+	}
+	
+	
+	@Test
+	public void login_5회_잠김() {
+		// 잠긴계정을 이용해서 테스트
+		try {
+			service.login("201", "pw123");
+		} catch (Exception e) {
+			// TODO 사용자정의예외처리로 변경하기
+			String msg = e.getMessage();
+			System.out.println(msg);
+		}
+	}
+	
+	@Test
+	public void login_정상처리() {
+		// 잠긴계정을 이용해서 테스트
+		try {
+			EmpDto emp = service.login("200", "1234");
+			System.out.println(emp.getEmpName() + "님 환영 합니다.");
+			
+		} catch (Exception e) {
+			// TODO 사용자정의예외처리로 변경하기
+			String msg = e.getMessage();
+			System.out.println(msg);
+		}
 	}
 }

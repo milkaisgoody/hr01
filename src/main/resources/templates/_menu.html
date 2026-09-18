@@ -16,7 +16,7 @@
          <header th:replace="~{fragments/menu :: siteHeader('emp')}"></header>
      ============================================================================= -->
 
-<header class="site-header">
+<header class="site-header" th:replace="~{./fragments/layout :: header}">
   <div class="site-header__inner container container--wide">
     <a class="site-header__brand" href="index.html">👔 사원관리</a>
     <nav class="site-nav hide-mobile" aria-label="주요 메뉴">
@@ -32,7 +32,7 @@
 
 <!-- 페이지 본문(<main>)은 여기 -->
 
-<footer class="site-footer">
+<header class="site-header" th:replace="~{./fragments/layout :: header}">
   <div class="container container--wide row row--between">
     <p>👔 사원관리 · 학습용 프로토타입</p>
     <span class="muted" style="font-size: var(--text-sm)">디자인 시스템: /css/basic.css</span>

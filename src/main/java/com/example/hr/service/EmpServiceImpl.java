@@ -81,6 +81,11 @@ public class EmpServiceImpl implements EmpService {
 		
 		return mapper.updateFailCount(id);
 	}
+
+	@Override
+	public int resetFailCount(String id) {
+		return mapper.resetFailCount(id);
+	}
 }
 
 

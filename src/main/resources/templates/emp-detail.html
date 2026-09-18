@@ -16,7 +16,7 @@
 
 <body>
   <!-- 공통 메뉴 — templates/hr/_menu.html 참고 (Thymeleaf 전환 시 fragment 로) -->
-  <header class="site-header">
+  <header class="site-header" th:replace="~{./fragments/layout :: header}">
     <div class="site-header__inner container container--wide">
       <a class="site-header__brand" href="index.html">👔 사원관리</a>
       <nav class="site-nav hide-mobile" aria-label="주요 메뉴">
@@ -103,7 +103,7 @@
     </div>
   </main>
 
-  <footer class="site-footer">
+  <footer class="site-footer" th:replace="~{./fragments/layout :: footer}">
     <div class="container container--wide row row--between">
       <p>👔 사원관리 · 학습용 프로토타입</p>
       <span class="muted" style="font-size: var(--text-sm)">디자인 시스템: /css/basic.css</span>

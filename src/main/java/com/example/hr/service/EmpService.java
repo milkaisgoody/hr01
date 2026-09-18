@@ -14,4 +14,6 @@ public interface EmpService {
 	EmpDto login(String id, String pw) throws Exception;
 	
 	int updateFailCount(String id);
+
+	int resetFailCount(String id);
 }

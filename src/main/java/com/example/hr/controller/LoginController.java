@@ -51,14 +51,16 @@ public class LoginController {
 			EmpDto emp = service.login(id, pw);
 			// 인증된 사용자의 정보를 세션영역에 저장
 			session.setAttribute("user", emp);
-			
+			int res = service.resetFailCount(id);
+			System.out.println("res : " + res);
 			// 사원 목록 페이지로 이동하기
 			return "redirect:emps";
 		} catch (Exception e) {
 			// failCnt 업데이트
 			//e.printStackTrace();
 			// 로그인 실패 카운팅, 5회 실패시 계정 잠금
-			service.updateFailCount(id);
+			int res = service.updateFailCount(id);
+			System.out.println("res : " + res);
 			// 오류 메세지 내용을 화면에 전달 
 			model.addAttribute("error", e.getMessage());
 			return "login";

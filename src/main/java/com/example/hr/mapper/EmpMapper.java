@@ -3,6 +3,7 @@ package com.example.hr.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
@@ -35,6 +36,14 @@ public interface EmpMapper {
 	
 	@Update("update emp set login_fail_count=0, last_login_at=now() where id=#{id}")
 	public int resetFailCount(String id);
+	
+	
+	// 비밀번호 업데이트
+	// 여러개의 값을 받아올때 어노테이션으로 이름을 명시
+	@Update("update emp set pw=#{pw} where id=#{id}")
+	public int updatePW(@Param("id") String id, @Param("pw") String pw);
+	// 객체로 받아서 사용
+	//public int updatePW(EmpDto emp);
 	
 	
 	

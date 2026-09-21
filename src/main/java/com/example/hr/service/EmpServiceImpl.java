@@ -1,8 +1,13 @@
 package com.example.hr.service;
 
+import com.example.hr.config.Config;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import com.example.hr.dto.EmpDto;
@@ -19,13 +24,17 @@ public class EmpServiceImpl implements EmpService {
 
 	// @Autowired : 필드 주입
 	// 리플렉션으로 필드에 직접 주입
-	
-	
+
+
 	// DI
 	// 1. 필드 주입
 	// 2. Setter 주입
 	// 3. 생성자 주입
 	private final EmpMapper mapper;
+	
+	// 필드주입
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 	
 	@Override
 	public int totalCnt() {
@@ -64,7 +73,9 @@ public class EmpServiceImpl implements EmpService {
 		// 4. 비밀번호 일치 확인 -> 일치하지 않으면 실패 카운트후 메세지 처리
 		// -> 예외가 발생되면 (( 롤백 ))이 되어버림 
 		// -> 컨트롤러에서 로그인 실패시 메서드를 다시 호출 
-		if(!emp.getPw().equals(pw)) {
+		//if(!emp.getPw().equals(pw)) {
+		System.out.println(pw + " / " + emp.getPw());
+		if(!encoder.matches(pw, emp.getPw())) {
 			throw new Exception("비밀번호가 일치하지 않습니다.");
 		}
 		
@@ -77,6 +88,7 @@ public class EmpServiceImpl implements EmpService {
 
 
 	@Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
 	public int updateFailCount(String id) {
 		
 		return mapper.updateFailCount(id);
